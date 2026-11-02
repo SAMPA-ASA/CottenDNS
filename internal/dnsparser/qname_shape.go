@@ -93,6 +93,7 @@ func shapeQNameLabelLengths(encodedLen int, seed uint64) []int {
 	}
 
 	lengths := make([]int, count)
+	maxLabelLen := qnameLabelLen()
 	base := encodedLen / count
 	rem := encodedLen % count
 	for i := range lengths {
@@ -107,8 +108,8 @@ func shapeQNameLabelLengths(encodedLen int, seed uint64) []int {
 	s := seed | 1
 	for i := 0; i+1 < count; i += 2 {
 		s = s*6364136223846793005 + 1442695040888963407 // LCG step
-		up := min(lengths[i]-1, maxDNSLabelLen-lengths[i+1])
-		down := min(lengths[i+1]-1, maxDNSLabelLen-lengths[i])
+		up := min(lengths[i]-1, maxLabelLen-lengths[i+1])
+		down := min(lengths[i+1]-1, maxLabelLen-lengths[i])
 		span := up + down
 		if span <= 0 {
 			continue
